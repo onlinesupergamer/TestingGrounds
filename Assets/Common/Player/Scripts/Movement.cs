@@ -10,21 +10,21 @@ using UnityEngine.EventSystems;
 */
 public class Movement : MonoBehaviour
 {
-    PlayerInput playerInput;
+    PlayerInput playerInput; //Ignore this for now, it's unused
 
-    CharacterController characterController;
+    CharacterController characterController; //Gets controller
 
 
-    public float jumpSpeed;
+    public float jumpSpeed; //Jump velocity
 
-    public float speed;
-    public float rotationSpeed;
-    public float jumpButtonGracePeriod;
+    public float speed; //Player movement speed
+    public float rotationSpeed; // player rotation speed - 720 seems to be a good starting point
+    public float jumpButtonGracePeriod; // How forgiving the jumping is; ie, slightly too late off a ledge
 
-    public float gravityAmount;
+    public float gravityAmount; // How much gravity to be applied
 
     [SerializeField]
-    Transform cameraTransform; //Check to Get main Camera Automatically
+    Transform cameraTransform; //Gets main Camera Automatically; MAKE SURE THE PLAYER CAMERA IS TAGGED AS MAIN CAMERA
 
     float ySpeed;
     float originalStepOffset;
@@ -37,7 +37,7 @@ public class Movement : MonoBehaviour
         characterController = GetComponent<CharacterController>();
         originalStepOffset = characterController.stepOffset;
 
-        cameraTransform = Camera.main.transform;
+        cameraTransform = Camera.main.transform; //Should Automatically be set if it's done correctly
 
     }
 
@@ -53,8 +53,13 @@ public class Movement : MonoBehaviour
 
         movementDirection = Quaternion.AngleAxis(cameraTransform.eulerAngles.y, Vector3.up) * movementDirection; //Makes the movement value relative to player camera
 
-        ySpeed += gravityAmount * Time.deltaTime;
+        ySpeed += gravityAmount * Time.deltaTime; //Adds gravity to player at a rate
 
+
+        ////////////////////////////////////////////////////////////////////////////////
+        
+        //All code here is for jump/coyote jump time
+        
         if (characterController.isGrounded) 
         {
             lastGroundedTime = Time.time;
@@ -82,21 +87,26 @@ public class Movement : MonoBehaviour
             characterController.stepOffset = 0;
         }
 
+
+        ////////////////////////////////////////////////////////////////////////////////
+
         Vector3 Velocity = movementDirection * magnitude;
-        Velocity.y = ySpeed;
+        Velocity.y = ySpeed; //Adds gravity to movement calculation
 
-        characterController.Move(Velocity * Time.deltaTime);
+        characterController.Move(Velocity * Time.deltaTime); //Actually moves the player
 
-        if (movementDirection != Vector3.zero)
+        if (movementDirection != Vector3.zero) //This part just calculates player rotation
         {
             Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
 
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.deltaTime); //This does the actual rotation
         }
     }
 
     private void OnApplicationFocus(bool focus)
     {
+        //Quality of life thing, locks the mouse when the application is in focus
+
         if (focus)
         {
             Cursor.lockState = CursorLockMode.Locked;
