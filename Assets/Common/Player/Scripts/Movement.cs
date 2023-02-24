@@ -43,15 +43,15 @@ public class Movement : MonoBehaviour
 
     private void Update()
     {
-        float horizontalInput = Input.GetAxis("Horizontal");
+        float horizontalInput = Input.GetAxis("Horizontal");    //Gets the input value
         float verticalInput = Input.GetAxis("Vertical");
 
-        Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
-        float magnitude = Mathf.Clamp01(movementDirection.magnitude) * speed;
+        Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput); //Creates the movement value
+        float magnitude = Mathf.Clamp01(movementDirection.magnitude) * speed; //Clamps the movement value
         
         movementDirection.Normalize();
 
-        movementDirection = Quaternion.AngleAxis(cameraTransform.eulerAngles.y, Vector3.up) * movementDirection;
+        movementDirection = Quaternion.AngleAxis(cameraTransform.eulerAngles.y, Vector3.up) * movementDirection; //Makes the movement value relative to player camera
 
         ySpeed += gravityAmount * Time.deltaTime;
 
