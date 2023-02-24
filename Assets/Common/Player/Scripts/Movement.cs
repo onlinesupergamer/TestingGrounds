@@ -17,13 +17,13 @@ public class Movement : MonoBehaviour
     CharacterController characterController; //Gets controller
 
 
-    public float jumpSpeed; //Jump velocity
+    public float jumpSpeed = 5f; //Jump velocity
 
-    public float speed; //Player movement speed
-    public float rotationSpeed; // player rotation speed - 720 seems to be a good starting point
-    public float jumpButtonGracePeriod; // How forgiving the jumping is; ie, slightly too late off a ledge
+    public float speed = 7f; //Player movement speed
+    public float rotationSpeed = 720f; // player rotation speed
+    public float jumpButtonGracePeriod = 0.2f; // How forgiving the jumping is; ie, slightly too late off a ledge
 
-    public float gravityAmount; // How much gravity to be applied
+    public float gravityAmount = 15f; // How much gravity to be applied
 
     [SerializeField]
     Transform cameraTransform; //Gets main Camera Automatically; MAKE SURE THE PLAYER CAMERA IS TAGGED AS MAIN CAMERA
@@ -55,7 +55,7 @@ public class Movement : MonoBehaviour
 
         movementDirection = Quaternion.AngleAxis(cameraTransform.eulerAngles.y, Vector3.up) * movementDirection; //Makes the movement value relative to player camera
 
-        ySpeed += gravityAmount * Time.deltaTime; //Adds gravity to player at a rate
+        ySpeed += gravityAmount * Time.deltaTime; //Applies gravity to player at a rate
 
 
         ////////////////////////////////////////////////////////////////////////////////
